@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 import software.amazon.awssdk.services.cloudfront.model.CannedSignerRequest;
 import software.amazon.awssdk.services.cloudfront.model.CustomSignerRequest;
 
@@ -21,7 +20,7 @@ public class SignPolicy {
     private String cloudfrontDomain;
     @Value("${aws.cloudfront.public-key}")
     private String publicKeyId;
-    private final ClassPathResource resource = new ClassPathResource("/da_private_key.der");
+    private final ClassPathResource resource = new ClassPathResource("/key/da_private_key.der");
 
 //    public SignPolicy(
 //        @Value("${aws.cloudfront.public-key}") String publicKeyId,
