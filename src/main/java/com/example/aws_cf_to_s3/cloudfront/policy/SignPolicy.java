@@ -21,8 +21,7 @@ public class SignPolicy {
     private String cloudfrontDomain;
     @Value("${aws.cloudfront.public-key}")
     private String publicKeyId;
-    private final ClassPathResource resource = new ClassPathResource(
-        ResourceUtils.CLASSPATH_URL_PREFIX + "da_private_key.der");
+    private final ClassPathResource resource = new ClassPathResource("/da_private_key.der");
 
 //    public SignPolicy(
 //        @Value("${aws.cloudfront.public-key}") String publicKeyId,
@@ -40,9 +39,8 @@ public class SignPolicy {
 
         String cloudFrontUrl = new URL(protocol, cloudfrontDomain, resourcePath).toString();
         Instant expirationDate = Instant.now().plus(1, ChronoUnit.HOURS);
+        log.info("resource : {}", resource.getPath());
         Path path = Paths.get(resource.getPath());
-
-        log.info("public key : {}", publicKeyId);
 
         return CannedSignerRequest.builder()
             .resourceUrl(cloudFrontUrl)
