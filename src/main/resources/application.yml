@@ -1,0 +1,4 @@
+aws:
+    cloudfront:
+        domain: "live8.stayg.tv"
+        public-key: "K1EDBOYGG0GWSI"
