@@ -21,8 +21,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'software.amazon.awssdk:cloudfront'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 
     compileOnly 'org.projectlombok:lombok'
+//    compileOnly 'net.java.dev.jets3t:jets3t:0.9.0'
 
     annotationProcessor 'org.projectlombok:lombok'
 

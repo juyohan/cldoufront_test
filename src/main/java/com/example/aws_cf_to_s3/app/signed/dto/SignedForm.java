@@ -1,4 +1,4 @@
-package com.example.aws_cf_to_s3.app.dto;
+package com.example.aws_cf_to_s3.app.signed.dto;
 
 import lombok.Builder;
 import lombok.Data;

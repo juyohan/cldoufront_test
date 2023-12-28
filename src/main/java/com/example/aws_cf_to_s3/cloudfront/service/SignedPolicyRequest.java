@@ -1,17 +1,10 @@
-package com.example.aws_cf_to_s3.cloudfront.policy;
+package com.example.aws_cf_to_s3.cloudfront.service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -21,13 +14,12 @@ import software.amazon.awssdk.services.cloudfront.model.CustomSignerRequest;
 
 @Slf4j
 @Component
-public class SignPolicy {
+public class SignedPolicyRequest {
 
     @Value("${aws.cloudfront.domain}")
     private String cloudfrontDomain;
     @Value("${aws.cloudfront.public-key}")
     private String publicKeyId;
-    private final ClassPathResource resource = new ClassPathResource("src/main/resources/key/da_private_key.der");
 
     public CannedSignerRequest createRequestForCannedPolicy(
         String resourcePath
@@ -37,7 +29,7 @@ public class SignPolicy {
 
         String cloudFrontUrl = new URL(protocol, cloudfrontDomain, resourcePath).toString();
         Instant expirationDate = Instant.now().plus(1, ChronoUnit.HOURS);
-        Path path = Paths.get(resource.getPath());
+        Path path = Paths.get(System.getProperty("user.home") + "/key/da_private_key.pem");
 
         return CannedSignerRequest.builder()
             .resourceUrl(cloudFrontUrl)
@@ -57,7 +49,7 @@ public class SignPolicy {
         Instant expireDate = Instant.now().plus(1, ChronoUnit.HOURS);
         // URL will be accessible tomorrow using the signed URL.
         Instant activeDate = Instant.now();
-        Path path = Paths.get(resource.getPath());
+        Path path = Paths.get(System.getProperty("user.home") + "/key/da_private_key.pem");
 
         return CustomSignerRequest.builder()
             .resourceUrl(cloudFrontUrl)

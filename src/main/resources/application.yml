@@ -2,3 +2,6 @@ aws:
     cloudfront:
         domain: "live8.stayg.tv"
         public-key: "K1EDBOYGG0GWSI"
+    credentials:
+        key-id: "AKIA3IK7IYECZCXBOTU7"
+        access-key: "jlXZueK71mvthx6cERruFGpofbaZVjz1C7dupxxA"
