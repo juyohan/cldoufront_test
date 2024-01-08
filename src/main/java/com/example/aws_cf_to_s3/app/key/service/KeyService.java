@@ -13,7 +13,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.jcajce.JcaPKCS8Generator;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemObjectGenerator;
@@ -39,11 +39,13 @@ public class KeyService {
         KeyPair pair = generator.generateKeyPair();
 
         KeyForm keyForm = new KeyForm();
+        PemObject pemObject;
 
         StringWriter sw = new StringWriter();
-        try (JcaPEMWriter writer = new JcaPEMWriter(sw)) {
+        try {
             PemObjectGenerator privateKey = new JcaPKCS8Generator(pair.getPrivate(), null);
-            writer.writeObject(privateKey);
+            pemObject = privateKey.generate();
+            savePrivateKey(pemObject);
         } catch (IOException e) {
             log.error("error : {}", e.getMessage());
         }
@@ -60,17 +62,16 @@ public class KeyService {
 
         keyForm.setPublicKey(sw.toString());
 
-        savePrivateKey(keyForm.getPrivateKey());
-
         return keyForm;
     }
 
-    private void savePrivateKey(String privateKey) {
-        File file = new File(System.getProperty("user.home") + "/key/da_private_key.pem");
+    private void savePrivateKey(PemObject pemObject) {
+        PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(pemObject.getContent());
+
+        File file = new File(System.getProperty("user.home") + "/key/da_private_key.der");
         if (isKeyFolder()) {
-            try (FileOutputStream stream = new FileOutputStream(file)) {
-                stream.write(privateKey.getBytes());
-                stream.flush();
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                fileOutputStream.write(privateKeyInfo.getEncoded());
             } catch (IOException e) {
                 log.error("message : {}", e.getMessage());
             }

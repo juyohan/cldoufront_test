@@ -11,6 +11,7 @@ public class SignedForm {
         private String resourcePath;
     }
 
+    @Data
     @Builder(toBuilder = true)
     public static class Response {
         private String signedUrl;

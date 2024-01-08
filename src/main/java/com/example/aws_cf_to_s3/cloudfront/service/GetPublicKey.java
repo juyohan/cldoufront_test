@@ -20,11 +20,6 @@ public class GetPublicKey {
         ListPublicKeysResponse listPublicKeysResponse = cloudFrontClient.listPublicKeys();
         List<PublicKeySummary> items = listPublicKeysResponse.publicKeyList().items();
         PublicKeySummary daRsaKey = items.stream()
-            .map(item -> {
-                log.info("item : {}", item.name());
-                log.info("boolean : {}", item.name().equals(PUBLIC_KEY_NAME));
-                return item;
-            })
             .filter(item -> item.name().equals(PUBLIC_KEY_NAME))
             .findFirst()
             .orElse(
